@@ -14,58 +14,43 @@
 #include <stdio.h>
 #include <fcntl.h>
 
-char *free_memory(char *mem_to_free)
+char	*read_buffer(int fd, char *buffer)
 {
-	free(mem_to_free);
-	return (0);
-}
-
-
-char	*copy_line(const char *start)
-{
-	char	*str_duplicate;
-	int 	i;
-	size_t	len;
 	
-	len = 0;
-	i = 0;
-	len = ft_strlen(start);
-	str_duplicate = (char *)ft_calloc(len + 2, 1);
-	if (str_duplicate == NULL)
-		return (NULL);
-	while (start[i] != '\n')
-	{
-		str_duplicate[i] = start[i];
-		i++;
-	}
-	if (start[i] == '\n')
-		str_duplicate[i] = '\n';
-	return (str_duplicate);
 }
 
-char *get_next_line(int fd)
+char *free_mem(char *memory)
 {
-	char			*line;
-	char			*start;
-	static char		buffer[BUFFER_SIZE];
-	static int		bytes_read = -1;
+	free(memory);
+	return (NULL);
+}
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || !fd)
+char	*get_next_line(int fd)
+{
+	static char		*safe;
+	char			*buffer;
+	char			*temp;
+	int				bytes_read;
+	
+	buffer = malloc(BUFFER_SIZE * sizeof(char));
+	if (!buffer)
 		return (NULL);
-	start = &buffer[bytes_read + 1];
-	while (bytes_read != 0 && bytes_read <= BUFFER_SIZE)
+	temp = "";
+	bytes_read = 1;
+	string = NULL;
+	while (bytes_read != 0 || BUFFER_SIZE < 1)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
-			return (NULL);
-		if (buffer[bytes_read + 1] == '\n')
-			break;
+			return free_mem(safe);
+		buffer[bytes_read]  = '\0';
+		safe = ft_strjoin()
 	}
-	line = copy_line(start);
-	if (line == NULL)
-		return free_memory(line);
-	return (line);
+	if (bytes_read == 0)
+		free(buffer);
+	return (0);
 }
+
 
 int main(void)
 {
@@ -73,12 +58,11 @@ int main(void)
 	char *string;
 	char *string2;
 	
-	fd = open("sample.txt", O_RDONLY | O_CREAT, 777);
+	fd = open("sample.txt", O_RDONLY | O_CREAT);
 	if (!fd)
 		return (-1);
 	string = get_next_line(fd);
-	string2 = get_next_line(fd);
-	printf("%s", string);
-	printf("%s", string2);
+	printf("%s\n", string);
+	free(string);
 	return (0);
 }

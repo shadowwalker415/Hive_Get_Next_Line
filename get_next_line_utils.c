@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-size_t ft_strlen(const char *str)
+size_t	ft_strlen(const char *str)
 {
 	size_t i;
 
@@ -22,32 +22,94 @@ size_t ft_strlen(const char *str)
 	return (i);
 }
 
-void	*ft_memset(void *b, int c, size_t len)
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
-	char	*temp;
-	size_t	i;
+	char	*temp_dest;
+	char	*temp_src;
+	size_t	remainder;
+	size_t	src_len;
 
-	temp = (char *)b;
-	i = 0;
-	while (i < len)
+	temp_dest = (char *)dst;
+	temp_src = (char *)src;
+	remainder = dstsize;
+	src_len = ft_strlen(temp_src);
+	while (*temp_src && remainder > 1)
 	{
-		temp[i] = (char)c;
-		i++;
+		*(temp_dest++) = *(temp_src++);
+		remainder--;
 	}
-	return (b);
+	if (remainder > 0)
+		*temp_dest = '\0';
+	return (src_len);
 }
 
-void	*ft_calloc(size_t count, size_t size)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	void	*ptr;
-	size_t	total_size;
+	int		i;
+	int		j;
+	char	*new_str;
 
-	if (count > 0 && size > 0 && count > UINT_MAX / size)
-		return (0);
-	total_size = count * size;
-	ptr = malloc(total_size);
-	if (!ptr)
-		return (0);
-	ptr = ft_memset(ptr, 0, total_size);
-	return (ptr);
+	if (s1 == NULL)
+		return (NULL);
+	new_str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 1);
+	if (new_str == NULL)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (s1[i] != '\0')
+	{
+		new_str[i] = s1[i];
+		i++;
+	}
+	while (s2[j] != '\0')
+	{
+		new_str[i] = s2[j];
+		i++;
+		j++;
+	}
+	new_str[i] = '\0';
+	return (new_str);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	char	character;
+	char	*temp;
+
+	temp = (char *)s;
+	character = c;
+	while (*temp)
+	{
+		if (*temp == character)
+			return (temp);
+		temp++;
+	}
+	if (character == *temp)
+		return (temp);
+	return (0);
+}
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*destination;
+	size_t	sub_len;
+
+	if (!s)
+		return (NULL);
+	sub_len = 0;
+	destination = NULL;
+	if (ft_strlen(s) >= start)
+	{
+		sub_len = ft_strlen(s + start);
+		if (sub_len > len)
+			sub_len = len;
+	}
+	destination = malloc(sub_len + 1);
+	if (destination == NULL)
+		return (NULL);
+	if (sub_len > 0)
+		ft_strlcpy(destination, s + start, sub_len + 1);
+	else
+		destination[sub_len] = 0;
+	return (destination);
 }
